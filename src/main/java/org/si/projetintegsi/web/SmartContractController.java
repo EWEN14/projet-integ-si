@@ -6,6 +6,8 @@ import org.si.projetintegsi.entities.enums.Coordonnees;
 import org.si.projetintegsi.repositories.SmartContratRepository;
 import org.si.projetintegsi.utils.PolygonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,9 +36,13 @@ public class SmartContractController {
     Double[][] tableauCoordonnees = coordonnees.getCoordonnees();
     System.out.println(Arrays.deepToString(tableauCoordonnees));
     if (PolygonUtils.estPolygoneValide(tableauCoordonnees)) {
-      return ResponseEntity.ok("Coordonnées postées avec succès !");
+      return ResponseEntity.ok()
+              .header(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE + "; charset=UTF-8")
+              .body("Coordonnees postees avec succes !");
     } else {
-      return ResponseEntity.badRequest().body("Les coordonnées ne représente pas un polygone");
+      return ResponseEntity.badRequest()
+              .header(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE + "; charset=UTF-8")
+              .body("Les coordonnees ne representent pas un polygone valide.");
     }
   }
 
